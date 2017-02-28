@@ -1,0 +1,23 @@
+Package: BestTSPred
+Title: Construction of objects of class BestTSPredParam
+Version: 0.1.0
+Author: David Salgado
+Maintainer: David Salgado <david.salgado.fernandez@ine.es>
+Description: This package contains the definition of the class BestTSPredParam
+    for finding the best prediction of several time series model prediction
+    specified as inputs
+Depends:
+    R (>= 3.3.0)
+Imports:
+    methods (>= 3.3.0),
+    data.table (>= 1.10.0),
+    StQ (>= 0.3.6),
+    TSPred (>= 0.2.3)
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Collate:
+    'BestTSPredParam-class.R'
+    'BestTSPred.R'
+    'initialize.BestTSPredParam.R'
+RoxygenNote: 5.0.1
