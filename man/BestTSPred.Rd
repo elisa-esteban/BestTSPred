@@ -3,9 +3,9 @@
 \docType{methods}
 \name{BestTSPred}
 \alias{BestTSPred}
-\alias{BestTSPred,StQList-method}
-\alias{BestTSPred,matrix-method}
 \alias{BestTSPred,vector-method}
+\alias{BestTSPred,matrix-method}
+\alias{BestTSPred,StQList-method}
 \title{Selección de la mejor predicción de un conjunto de modelos de series temporales.}
 \usage{
 BestTSPred(x, BestTSPredParam)
@@ -58,14 +58,15 @@ TS.list <- list(Reg = list('RegDiffTSPred', forward = 2L),
 BestTSPredParam <- new(Class='BestTSPredParam', TSPred.list = TS.list)
 BestTSPred(Example1.TS, BestTSPredParam)
 
+\dontrun{
 # With an object of class StQList
 data(StQList_Example)
 VarNames <- c('ActivEcono_35._6._2.1.4._0', 'GeoLoc_35._6._2.1._1.2.5.')
 TS.list <- list(Reg = list('RegDiffTSPred', forward = 2L),
                 Stat = list('StatDiffTSPred', forward = 2L),
-                StatReg = list('StatRegDiffTSPred', forward = 2L))
+                StatReg = list('StatRegDiffTSPred', forward = 2L),
+                Arima = list('AutoArimaTSPred', forward = 2L))
 BestTSPredParam <- new(Class='BestTSPredParam', TSPred.list = TS.list, VarNames = VarNames)
 BestTSPred(StQList_Example, BestTSPredParam)
-
 }
-
+}

@@ -3,7 +3,6 @@
 export(BestTSPred)
 exportClasses(BestTSPredParam)
 exportMethods(BestTSPred)
-exportMethods(initialize)
 import(StQ)
 import(TSPred)
 import(data.table)

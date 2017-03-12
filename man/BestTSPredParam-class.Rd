@@ -18,9 +18,9 @@ acuerdo a los distintos modelos.}
 \item{\code{VarNames}}{\code{Vector} de tipo \code{character} con los nombres de las
 variables a las que corresponden las predicciones.}
 }}
+
 \examples{
 # Un prototipo vacío
 new(Class = 'BestTSPredParam')
 
 }
-
