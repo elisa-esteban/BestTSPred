@@ -52,7 +52,7 @@
 #'                 StatReg = list('StatRegDiffTSPred', forward = 2L),
 #'                 Arima = list('AutoArimaTSPred', forward = 2L))
 #' BestTSPredParam <- new(Class='BestTSPredParam', TSPred.list = TS.list, VarNames = VarNames)
-#' BestTSPred(StQList, BestTSPredParam)->x
+#' BestTSPred(StQList, BestTSPredParam)
 #' }
 #'
 #'
