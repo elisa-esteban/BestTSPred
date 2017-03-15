@@ -11,14 +11,13 @@ Depends:
 Imports:
     methods (>= 3.3.0),
     data.table (>= 1.10.0),
-    RepoTime (>= 0.2.1),
-    StQ (>= 0.3.6),
-    TSPred (>= 0.2.3)
+    StQ (>= 0.3.20),
+    TSPred (>= 0.2.3),
+    RepoTime (>= 0.2.0)
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Collate:
     'BestTSPredParam-class.R'
     'BestTSPred.R'
-    'initialize.BestTSPredParam.R'
 RoxygenNote: 5.0.1

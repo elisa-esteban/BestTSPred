@@ -29,8 +29,6 @@
 #'   data.tables.
 #' }
 #'
-#' @include BestTSPredParam-class.R
-#'
 #' @examples
 #'
 #' # Predicting one and two months ahead in time
@@ -45,6 +43,12 @@
 #' # With an object of class StQList
 #' data(StQListExample)
 #' VarNames <- c('ActivEcono_35._6._2.1.4._0', 'GeoLoc_35._6._2.1._1.2.5.')
+#' StQList <- readRDS('../E30183.FF.StQList.rds')
+#' Units <- StQ::getUnits(StQList[['MM102016']])
+#' Units <- Units[sample(1:(dim(Units)[1]), 1000)]
+#' data.table::setkeyv(Units, 'NOrden')
+#' StQ::setUnits(StQList) <- Units
+#' VarNames <- c('CifraNeg_13.___', 'Personal_07.__1._1._')
 #' TS.list <- list(Reg = list('RegDiffTSPred', forward = 2L),
 #'                 Stat = list('StatDiffTSPred', forward = 2L),
 #'                 StatReg = list('StatRegDiffTSPred', forward = 2L),
@@ -56,6 +60,11 @@
 #' @import data.table RepoTime  StQ TSPred
 #'
 #' @include BestTSPredParam-class.R
+#'
+#' @export
+setGeneric("BestTSPred", function(x, BestTSPredParam){standardGeneric("BestTSPred")})
+
+#' @rdname BestTSPred
 #'
 #' @export
 setGeneric("BestTSPred", function(x, BestTSPredParam){standardGeneric("BestTSPred")})
@@ -98,6 +107,7 @@ setMethod(
   function(x, BestTSPredParam){
 
     VarNames <- BestTSPredParam@VarNames
+
     if (length(VarNames) == 0){
 
       stop('[BestTSPred StQList] Slot VarNames in the parameter BestTSPredParam must be specified.')
