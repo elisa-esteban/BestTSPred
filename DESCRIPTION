@@ -20,4 +20,4 @@ LazyData: true
 Collate:
     'BestTSPredParam-class.R'
     'BestTSPred.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

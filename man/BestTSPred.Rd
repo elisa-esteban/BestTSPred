@@ -3,8 +3,9 @@
 \docType{methods}
 \name{BestTSPred}
 \alias{BestTSPred}
-\alias{BestTSPred,StQList-method}
+\alias{BestTSPred}
 \alias{BestTSPred,vector-method}
+\alias{BestTSPred,StQList-method}
 \title{Selección de la mejor predicción de un conjunto de modelos de series temporales.}
 \usage{
 BestTSPred(x, BestTSPredParam)
@@ -76,4 +77,3 @@ BestTSPred(StQListExample, BestTSPredParam)
 }
 
 }
-
