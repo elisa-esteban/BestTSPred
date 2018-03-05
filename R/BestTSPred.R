@@ -77,34 +77,38 @@ setMethod(
   signature = c("vector"),
   function(x, BestTSPredParam){
 
-    n_cores <- max(1, detectCores() - 1)
-    clust <- makeCluster(n_cores)
 
-    clusterExport(clust, c('x', 'BestTSPredParam'), envir = environment())
-    clusterEvalQ(clust, library(data.table))
-    clusterEvalQ(clust, library(TSPred))
-    clusterEvalQ(clust, library(BestTSPred))
-
-    Results.List <- parLapply(clust, seq(along = BestTSPredParam@TSPred.list), function(TSPred){
+    Results <- lapply(seq(along = BestTSPredParam@TSPred.list), function(TSPred){
 
       Function <- BestTSPredParam@TSPred.list[[TSPred]][[1L]]
       Param.List <- list()
       Param.List[['x']] <- x
       if (length(BestTSPredParam@TSPred.list[[TSPred]]) >= 2) Param.List <- c(Param.List, BestTSPredParam@TSPred.list[[TSPred]][-1])
+
       out <- do.call(Function, Param.List)
+      out[, TSPred := TSPred]
       return(out)
 
     })
 
-    stopCluster(clust)
+    DT <- rbindlist(Results)
+    IDQuals <- setdiff(names(DT), c('Pred', 'STD', 'TSPred'))
+    STD.na <- DT[, all(is.na(STD)), by = IDQuals]
+    STD.na <- STD.na[V1 == TRUE]
+    if (dim(STD.na)[1] > 0){
 
-    STD <- rbindlist(Results.List)[['STD']]
+      STD.na <- STD.na[, Pred := as.numeric(NA)]
+      STD.na <- STD.na[, STD := as.numeric(NA)]
+      STD.na[, V1 := NULL]
+      units.na <- STD.na[[IDQuals]]
+      DT <- DT[!(DT[[IDQuals]] %in% units.na)]
+    }
+    MinSTD.index <- DT[, which.min(STD), by = IDQuals]
+    setnames(MinSTD.index, 'V1', 'TSPred')
+    output <- merge(DT, MinSTD.index, by = c(IDQuals, 'TSPred'))
+    output[, TSPred := NULL]
+    if (dim(STD.na)[1] > 0) output <- rbind(STD.na, output)
 
-
-    if (all(is.na(STD))) return(list(Pred = as.numeric(NA), STD = as.numeric(NA)))
-    MinSTD.index <- which.min(STD)
-
-    output <- Results.List[[MinSTD.index]]
 
     return(output)
   }
@@ -117,63 +121,55 @@ setMethod(
   signature = c("StQList"),
   function(x, BestTSPredParam){
 
-    VarNames <- BestTSPredParam@VarNames
+      VarNames <- BestTSPredParam@VarNames
 
-    if (length(VarNames) == 0) {
+      if (length(VarNames) == 0) stop('[BestTSPred StQList] Slot VarNames in the parameter BestTSPredParam must be specified.')
 
-      stop('[BestTSPred::BestTSPred StQList] Slot VarNames in the parameter BestTSPredParam must be specified.')
-    }
-
-    x_StQ <- StQListToStQ(x)
-    DT <- dcast_StQ(x_StQ, ExtractNames(VarNames))
-    IDQuals <- setdiff(names(DT), c(VarNames, 'Period'))
-    DT[, orderPeriod := orderRepoTime(Period), by = IDQuals]
-    setkeyv(DT, c(IDQuals, 'orderPeriod'))
-
-    if (length(VarNames) == 1) {
-
-      output <- DT[ ,BestTSPred(get(VarNames), BestTSPredParam = BestTSPredParam),
-                    by = IDQuals]
-      setnames(output, c('Pred', 'STD'), paste0(c('Pred', 'STD'), VarNames))
-
-
-    } else {
-
-
-      output <- lapply(seq(along = BestTSPredParam@TSPred.list), function(TSPred){
+      Results <- lapply(seq(along = BestTSPredParam@TSPred.list), function(TSPred){
 
         Function <- BestTSPredParam@TSPred.list[[TSPred]][[1L]]
         Param.List <- list()
         Param.List[['x']] <- x
-        Param.List[['VarNames']] <- BestTSPredParam@VarNames
+        Param.List[['VarNames']] <- VarNames
         if (length(BestTSPredParam@TSPred.list[[TSPred]]) >= 2) Param.List <- c(Param.List, BestTSPredParam@TSPred.list[[TSPred]][-1])
         out <- do.call(Function, Param.List)
-        rm(Param.List)
-        gc()
+        out[, TSPred := TSPred]
         return(out)
 
       })
 
 
-      names(output) <- names(BestTSPredParam_logit@TSPred.list)
-      lapply(names(output), function(name){output[[name]][, PredMethod := name]})
-      output <- rbindlist(output)
-      setkeyv(output, c(IDQuals, 'PredMethod'))
-      output <- melt.data.table(output, id.vars = c(IDQuals, 'PredMethod'), measure.vars = setdiff(names(output), c(IDQuals, 'PredMethod')))
-      output[, VarAnalisis := ifelse(substr(variable, 1, 3) == 'STD', substr(variable, 4, length(variable)), substr(variable, 5, length(variable)))]
-      outSTD <- output[grep('STD', variable)]
-      setorderv(outSTD, c('NOrden', 'VarAnalisis', 'value'), na.last = TRUE)
-      out_STS_min <- outSTD[!duplicated(outSTD, by = c(IDQuals, 'VarAnalisis'))]
-      out_STS_min <- out_STS_min[, c('variable', 'value') := NULL]
-      output <- merge(output, out_STS_min, by = c(IDQuals, 'VarAnalisis'))
-      output <- subset(output, PredMethod.x == PredMethod.y)[, c('VarAnalisis', 'PredMethod.x', 'PredMethod.y') := NULL]
-      Form <- paste0(IDQuals, ' ~ variable')
-      output <- dcast(output, as.formula(Form), value.var = 'value')
+      output <- rbindlist(Results)
+      IDQuals <- setdiff(names(output), c(paste0('Pred', VarNames), paste0('STD', VarNames), 'TSPred'))
 
+      Results <- lapply(VarNames, function(var){
 
-    }
+        cols <- names(output)[grep(var, names(output))]
+        DT <- copy(output)[, c(IDQuals, cols, 'TSPred'), with = FALSE]
+        setnames(DT, cols[2], 'STD')
+        STD.na <- DT[, all(is.na(STD)), by = IDQuals]
+        STD.na <- STD.na[V1 == TRUE]
+        if (dim(STD.na)[1] > 0){
+
+          STD.na <- STD.na[, (cols[1]) := as.numeric(NA)]
+          STD.na <- STD.na[, (cols[2]) := as.numeric(NA)]
+          STD.na[, V1 := NULL]
+          units.na <- STD.na[[IDQuals]]
+          DT <- DT[!(DT[[IDQuals]] %in% units.na)]
+        }
+        MinSTD.index <- DT[, which.min(STD), by = IDQuals]
+        setnames(MinSTD.index, 'V1', 'TSPred')
+        out <- merge(DT, MinSTD.index, by = c(IDQuals, 'TSPred'))
+        out[, TSPred := NULL]
+        setnames(out, 'STD', cols[2])
+        if(dim(STD.na)[1] > 0) out <- rbind(STD.na, out)
+
+        return(out)
+      })
+
+      output <- Reduce(merge, Results)
+
 
     return(output)
 
-  }
-)
+  })
