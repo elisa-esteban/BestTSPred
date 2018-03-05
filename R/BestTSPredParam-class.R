@@ -14,7 +14,7 @@ setClassUnion('characterOrNULL', c('character', 'NULL'))
 #' de diseño de las funciones en el paquete \code{TSPred};
 #' \item un slot opcional de tipo \code{character} con los nombres de las variables
 #' a predecir;
-#'
+#' }
 #' @slot TSPred.list Objeto de clase \code{\link{list}} cuyos componentes contienen
 #' los elementos de cada llamada a las funciones que calculan las predicciones de
 #' acuerdo a los distintos modelos.

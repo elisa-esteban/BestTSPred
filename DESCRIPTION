@@ -1,6 +1,6 @@
 Package: BestTSPred
 Title: Construction of objects of class BestTSPredParam
-Version: 0.1.1
+Version: 0.2.0
 Author: David Salgado
 Maintainer: David Salgado <david.salgado.fernandez@ine.es>
 Description: This package contains the definition of the class BestTSPredParam
@@ -13,7 +13,8 @@ Imports:
     data.table (>= 1.10.0),
     StQ (>= 0.3.20),
     TSPred (>= 0.2.3),
-    RepoTime (>= 0.2.0)
+    RepoTime (>= 0.2.0), 
+    parallel (>= 3.3.3)
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
