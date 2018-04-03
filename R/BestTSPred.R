@@ -144,7 +144,7 @@ setMethod(
 
       Results <- lapply(VarNames, function(var){
 
-        cols <- names(output)[grep(paste0(var,{1}), names(output))]
+        cols <- names(output)[grep(paste0(var,'$'), names(output))]
         DT <- copy(output)[, c(IDQuals, cols, 'TSPred'), with = FALSE]
         setnames(DT, cols[2], 'STD')
         STD.na <- DT[, all(is.na(STD)), by = IDQuals]
