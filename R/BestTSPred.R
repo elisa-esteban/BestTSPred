@@ -144,12 +144,12 @@ setMethod(
 
       Results <- lapply(VarNames, function(var){
 
-        cols <- names(output)[grep(var, names(output))]
+        cols <- names(output)[grep(paste0(var,{1}), names(output))]
         DT <- copy(output)[, c(IDQuals, cols, 'TSPred'), with = FALSE]
         setnames(DT, cols[2], 'STD')
         STD.na <- DT[, all(is.na(STD)), by = IDQuals]
         STD.na <- STD.na[V1 == TRUE]
-        if (dim(STD.na)[1] > 0){
+        if (dim(STD.na)[1] > 0) {
 
           STD.na <- STD.na[, (cols[1]) := as.numeric(NA)]
           STD.na <- STD.na[, (cols[2]) := as.numeric(NA)]
@@ -162,7 +162,7 @@ setMethod(
         out <- merge(DT, MinSTD.index, by = c(IDQuals, 'TSPred'))
         out[, TSPred := NULL]
         setnames(out, 'STD', cols[2])
-        if(dim(STD.na)[1] > 0) out <- rbind(STD.na, out)
+        if (dim(STD.na)[1] > 0) out <- rbind(STD.na, out)
 
         return(out)
       })
