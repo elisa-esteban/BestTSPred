@@ -126,7 +126,7 @@ setMethod(
 
         Function <- BestTSPredParam@TSPred.list[[TSPred]][[1L]]
         Param.List <- list()
-        Param.List[['x']] <- x
+        Param.List[['x']] <- x[IDDD != '']
         Param.List[['VarNames']] <- VarNames
         if (length(BestTSPredParam@TSPred.list[[TSPred]]) >= 2) Param.List <- c(Param.List, BestTSPredParam@TSPred.list[[TSPred]][-1])
         out <- do.call(Function, Param.List)
