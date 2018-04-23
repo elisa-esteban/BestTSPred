@@ -77,12 +77,14 @@ setMethod(
   signature = c("vector"),
   function(x, BestTSPredParam){
 
+
     Results <- lapply(seq(along = BestTSPredParam@TSPred.list), function(TSPred){
 
       Function <- BestTSPredParam@TSPred.list[[TSPred]][[1L]]
       Param.List <- list()
       Param.List[['x']] <- x
       if (length(BestTSPredParam@TSPred.list[[TSPred]]) >= 2) Param.List <- c(Param.List, BestTSPredParam@TSPred.list[[TSPred]][-1])
+
       out <- do.call(Function, Param.List)
       out[, TSPred := TSPred]
       return(out)
@@ -105,7 +107,8 @@ setMethod(
     setnames(MinSTD.index, 'V1', 'TSPred')
     output <- merge(DT, MinSTD.index, by = c(IDQuals, 'TSPred'))
     output[, TSPred := NULL]
-    if(dim(STD.na)[1] > 0) output <- rbind(STD.na, output)
+    if (dim(STD.na)[1] > 0) output <- rbind(STD.na, output)
+
 
     return(output)
   }
@@ -135,17 +138,18 @@ setMethod(
 
       })
 
+
       output <- rbindlist(Results)
       IDQuals <- setdiff(names(output), c(paste0('Pred', VarNames), paste0('STD', VarNames), 'TSPred'))
 
       Results <- lapply(VarNames, function(var){
 
-        cols <- names(output)[grep(var, names(output))]
+        cols <- names(output)[grep(paste0(var,'$'), names(output))]
         DT <- copy(output)[, c(IDQuals, cols, 'TSPred'), with = FALSE]
         setnames(DT, cols[2], 'STD')
         STD.na <- DT[, all(is.na(STD)), by = IDQuals]
         STD.na <- STD.na[V1 == TRUE]
-        if (dim(STD.na)[1] > 0){
+        if (dim(STD.na)[1] > 0) {
 
           STD.na <- STD.na[, (cols[1]) := as.numeric(NA)]
           STD.na <- STD.na[, (cols[2]) := as.numeric(NA)]
@@ -158,12 +162,13 @@ setMethod(
         out <- merge(DT, MinSTD.index, by = c(IDQuals, 'TSPred'))
         out[, TSPred := NULL]
         setnames(out, 'STD', cols[2])
-        if(dim(STD.na)[1] > 0) out <- rbind(STD.na, out)
+        if (dim(STD.na)[1] > 0) out <- rbind(STD.na, out)
 
         return(out)
       })
 
       output <- Reduce(merge, Results)
+
 
     return(output)
 

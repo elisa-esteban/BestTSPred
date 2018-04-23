@@ -8,6 +8,19 @@
 Definición de la clase S4 \linkS4class{BestTSPredParam} para los parámetros que
 hay que pasar como argumentos a la función \code{BestTSPred}.
 }
+\details{
+La estructura de la clase S4 \code{BestTSPredParam} consta de:
+\itemize{
+\item el slot \code{TSPred.list} de clase \code{\link{list}} con los argumentos
+necesarios para llamar a las funciones de los distintos modelos de series
+temporales que generan las predicciones. Se trata de listas cuya primera componente
+es el nombre de la función y el resto son los argumentos que requieren dichas
+funciones. El output de cada unos de estos modelos debe cumplir con los requisitos
+de diseño de las funciones en el paquete \code{TSPred};
+\item un slot opcional de tipo \code{character} con los nombres de las variables
+a predecir;
+}
+}
 \section{Slots}{
 
 \describe{

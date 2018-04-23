@@ -14,7 +14,7 @@ setClassUnion('characterOrNULL', c('character', 'NULL'))
 #' de diseño de las funciones en el paquete \code{TSPred};
 #' \item un slot opcional de tipo \code{character} con los nombres de las variables
 #' a predecir;
-#'
+#' }
 #' @slot TSPred.list Objeto de clase \code{\link{list}} cuyos componentes contienen
 #' los elementos de cada llamada a las funciones que calculan las predicciones de
 #' acuerdo a los distintos modelos.
@@ -40,11 +40,11 @@ setClass(
   slots = c(TSPred.list = "list",
             VarNames = "characterOrNULL"),
   validity = function(object){
-    if (length(object@TSPred.list) == 0) stop('[BestTSPred::BestTSPredParam validity] The slot TSPred.list must have at least one component.')
+    if (length(object@TSPred.list) == 0) stop('[BestTSPred::BestTSPredParam validity] El slot TSPred.list debe tener al menos una componente.')
 
     Forwards <- as.integer(unlist(lapply(object@TSPred.list, function(List){List[['forward']]})))
 
-    if (length(unique(Forwards)) != 1) stop('[BestTSPredParam: validation] Todos los parámetros forward en el slot TSPred.list deben ser el mismo.')
+    if (length(unique(Forwards)) != 1) stop('[BestTSPred::BestTSPredParam validity] El valor del parametro forward debe ser el mismo en todas las componentes del slot TSPred.list.')
     return(TRUE)
   }
 )
