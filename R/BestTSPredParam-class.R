@@ -40,11 +40,13 @@ setClass(
   slots = c(TSPred.list = "list",
             VarNames = "characterOrNULL"),
   validity = function(object){
+
     if (length(object@TSPred.list) == 0) stop('[BestTSPred::BestTSPredParam validity] El slot TSPred.list debe tener al menos una componente.')
 
-    Forwards <- as.integer(unlist(lapply(object@TSPred.list, function(List){List[['forward']]})))
+    TSPredMethods <- unlist(lapply(object@TSPred.list, function(List){List[[1]]}))
+    Forwards <- unique(as.integer(unlist(lapply(object@TSPred.list, function(List){List[['forward']]}))))
 
-    if (length(unique(Forwards)) != 1) stop('[BestTSPred::BestTSPredParam validity] El valor del parametro forward debe ser el mismo en todas las componentes del slot TSPred.list.')
+    if (!('FixedTSPred' %in% TSPredMethods) & length(Forwards) > 1) stop('[BestTSPred::BestTSPredParam validity] El valor del parametro forward debe ser el mismo en todas las componentes del slot TSPred.list.')
     return(TRUE)
   }
 )
