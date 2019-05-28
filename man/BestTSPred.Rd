@@ -6,7 +6,7 @@
 \alias{BestTSPred}
 \alias{BestTSPred,vector-method}
 \alias{BestTSPred,StQList-method}
-\title{Selección de la mejor predicción de un conjunto de modelos de series temporales.}
+\title{Seleccion de la mejor prediccion de un conjunto de modelos de series temporales.}
 \usage{
 BestTSPred(x, BestTSPredParam)
 
@@ -17,36 +17,26 @@ BestTSPred(x, BestTSPredParam)
 \S4method{BestTSPred}{StQList}(x, BestTSPredParam)
 }
 \arguments{
-\item{x}{\code{vector}, \code{matrix} u objeto de clase \code{StQList}, con las variables y los
-valores para los que obtenemos las predicciones.}
+\item{x}{\code{vector} u objeto de clase \code{StQList}, con las variables y los valores para los
+que obtendremos las predicciones.}
 
-\item{BestTSPredParam}{Objeto de clase \linkS4class{BestTSPredParam} con los parámetros
-de los distintos modelos de predicción de series temporales con los que se generan
-las diferentes predicciones y las variables sobre las que se calculan.}
+\item{BestTSPredParam}{Objeto de clase \linkS4class{BestTSPredParam} con los parametros de los
+distintos modelos de prediccion de series temporales y las variables para las que se quieren
+obtener las predicciones.}
 }
 \value{
-Lista con componentes \code{Pred} y \code{STD} que contienen
-la mejor predicción de entre las especificadas en el objeto de entrada
-\code{BestTSPredParam}, y sus correspondientes desviaciones típicas estimadas,
-respectivamente.
-
-\itemize{
- \item For input class vector, it returns numeric vectors.
- \item For input class matrix, it returns matrices.
- \item For input class StQList, it returns list whose components are
-  data.tables.
-}
+\code{data.table} con componentes \code{Pred} y \code{STD} que contienen la mejor
+prediccion, para cada variable, de entre las especificadas en el objeto de entrada
+\code{BestTSPredParam}, y sus correspondientes desviaciones tipicas estimadas.
 }
 \description{
-\code{BestTSPred} Selecciona la mejor predicción para una serie de tiempo de
-entre las proporcionadas por un conjunto de modelos.
+\code{BestTSPred} Selecciona la mejor prediccion para una serie de tiempo de entre las
+proporcionadas por un conjunto de modelos.
 }
 \details{
-Este método toma como argumento de entrada el objeto \code{x} que contiene las
-variables que queremos predecir y selecciona la mejor predicción de entre un
-conjunto de predicciones especificadas como input en el objeto de clase
-\linkS4class{BestTSPredParam}. Este parámetro contiene los diferentes modelos
-de predicción de series temporales que generan las distintas predicciones.
+Este metodo toma como argumento de entrada el objeto \code{x} que contiene las variables que
+queremos predecir y selecciona la mejor prediccion de entre un conjunto de predicciones
+especificadas como input en el objeto de clase \linkS4class{BestTSPredParam}.
 }
 \examples{
 
