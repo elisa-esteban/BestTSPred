@@ -121,17 +121,21 @@ setMethod(
   signature = c("StQList"),
   function(x, BestTSPredParam){
 
-      VarNames <- BestTSPredParam@VarNames
 
+      VarNames <- BestTSPredParam@VarNames
       if (length(VarNames) == 0) stop('[BestTSPred StQList] Slot VarNames in the parameter BestTSPredParam must be specified.')
+
+      x_IDDDnoNA <- x[IDDD != '']
 
       Results <- lapply(seq(along = BestTSPredParam@TSPred.list), function(TSPred){
 
         Function <- BestTSPredParam@TSPred.list[[TSPred]][[1L]]
         Param.List <- list()
-        Param.List[['x']] <- x[IDDD != '']
+        Param.List[['x']] <- x_IDDDnoNA
         Param.List[['VarNames']] <- VarNames
+
         if (length(BestTSPredParam@TSPred.list[[TSPred]]) >= 2) Param.List <- c(Param.List, BestTSPredParam@TSPred.list[[TSPred]][-1])
+
         out <- do.call(Function, Param.List)
         out[, TSPred := TSPred]
         return(out)

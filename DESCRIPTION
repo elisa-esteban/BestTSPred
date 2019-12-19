@@ -1,6 +1,6 @@
 Package: BestTSPred
 Title: Construction of objects of class BestTSPredParam
-Version: 0.2.2
+Version: 0.2.3
 Author: David Salgado
 Maintainer: David Salgado <david.salgado.fernandez@ine.es>
 Description: This package contains the definition of the class 
@@ -23,4 +23,4 @@ Collate:
     'Example1.TS.R'
     'Example2.TS.R'
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
