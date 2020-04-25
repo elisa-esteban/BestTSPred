@@ -125,15 +125,24 @@ setMethod(
         Param.List[['VarNames']] <- VarNames
 
         if (length(BestTSPredParam@TSPred.list[[TSPred]]) >= 2) Param.List <- c(Param.List, BestTSPredParam@TSPred.list[[TSPred]][-1])
-
         out <- do.call(Function, Param.List)
         out[, TSPred := TSPred]
         return(out)
 
       })
 
+      output <- rbindlist(Results, fill = TRUE)
+      outputNames <- names(output)
+      actualVarNames <- c()
+      for (vn in VarNames){
 
-      output <- rbindlist(Results)
+        predVN <- outputNames[grep(vn, outputNames)][1]
+        varName <- substr(predVN, 5, nchar(predVN))
+        actualVarNames <- c(actualVarNames, varName)
+
+      }
+      VarNames <- actualVarNames[!is.na(actualVarNames)]
+
       IDQuals <- setdiff(names(output), c(paste0('Pred', VarNames), paste0('STD', VarNames), 'TSPred'))
 
       Results <- lapply(VarNames, function(var){

@@ -1,6 +1,6 @@
 Package: BestTSPred
 Title: Construction of objects of class BestTSPredParam
-Version: 0.2.5
+Version: 0.2.6
 Author: David Salgado
 Maintainer: David Salgado <david.salgado.fernandez@ine.es>
 Description: This package contains the definition of the class 
